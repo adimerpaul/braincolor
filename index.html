@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+    <style>
+        #sitio {
+            padding: 5rem;
+            font-size: 5rem;
+            margin-left: 15rem;
+        }
+    </style>
+</head>
+<body>
+    <p>
+        <input data-jscolor="{}" value="#3399FF" onchange="update(this.jscolor)">
+        <div id="sitio">
+            Mi pagina
+        </div>
+    </p>
+    <script src="jscolor.min.js"></script>
+    <script src="https://unpkg.com/brain.js@2.0.0-beta.2/dist/brain-browser.min.js"></script>
+<script>
+    var net = new brain.NeuralNetwork();
+    net.train([
+        {input:{rojo:0,verde:0,azul:0},output:{color:1}},
+        {input:{rojo:1,verde:1,azul:1},output:{color:0}}
+    ])
+    function update(color){
+        /* console.log(color.channels) */
+        /* console.log(color) */
+        var div=document.getElementById('sitio')
+        div.style.background="rgb("+color.channels.r+","+color.channels.g+","+color.channels.b+")"
+        var entrada={
+            rojo:color.channels.r/255,
+            verde:color.channels.g/255,
+            azul:color.channels.b/255,
+        }
+        resultado=net.run(entrada)
+        console.log(resultado)
+        if(resultado.color>0.5){
+            div.style.color="white"
+        }else{
+            div.style.color="black"
+        }
+
+    }
+</script>
+</body>
+</html>
